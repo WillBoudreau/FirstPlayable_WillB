@@ -99,17 +99,50 @@ namespace FirstPlayable_WillB
             }
             Console.ReadKey();
         }
-        static void Status()
+        static void ShowHUD()
         {
 
         }
         static void tutorial()
         {
-            Console.Write("Welcome to the tutorial! Here we will cover the basics to playing the game:\n First off is you the player");
+            Console.Write("Welcome to the tutorial! Here we will cover the basics to playing the game:" +
+                          "\nFirst off is you the player");
             milliseconds = 2000;
             Thread.Sleep(milliseconds);
-            Console.WriteLine("\nYou are the main character of this adventure\n if you die and your lives reach 0\n The journeys over, you died.");
+            Console.WriteLine("\nIn this world, you will face monsters of unimaginable horrors!" +
+                              "\nMonsters that want to eat you alive!");
+            Thread.Sleep(milliseconds);
+            Console.WriteLine("\nYou are the main character of this adventure" +
+                              "\n if you die and your lives reach 0" +
+                              "\n The journeys over, you died.");
+            Thread.Sleep(milliseconds);
+            Console.WriteLine("\nIn this game you will use the WASD keys to move" +
+                              "\nW-To move up" +
+                              "\nA-To move right" +
+                              "\nS-To move down" +
+                              "\nD-To move Left" +
+                              "\nClick-To deploy" +
+                              "\nWhen you reach a monster, move into them to do damage. But if they move into you, they do damage to you");
+            Thread.Sleep(milliseconds);
+            Console.WriteLine("\nGive it a try");
+            Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
+            for(int i = 0; i < map.GetLength(0); i++)
+            {
+                Console.Write("|");  
+                for(int j = 0; j < map.GetLength(1); j++)
+                {
+                    Console.Write(map[i, j]);
+                    
+                }
+                Console.Write("|");
+                Console.Write('\n');
+            }
+            Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
 
+        }
+        static void stage1()
+        {
+            Console.WriteLine("Welcome to stage 1");
         }
         
     }
