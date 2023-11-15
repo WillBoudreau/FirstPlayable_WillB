@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace FirstPlayable_WillB
 {
@@ -121,10 +122,12 @@ namespace FirstPlayable_WillB
                               "\nA-To move right" +
                               "\nS-To move down" +
                               "\nD-To move Left" +
-                              "\nClick-To deploy" +
                               "\nWhen you reach a monster, move into them to do damage. But if they move into you, they do damage to you");
             Thread.Sleep(milliseconds);
-            Console.WriteLine("\nGive it a try");
+            bool start = true;
+            while(start == true)
+            {
+                Console.WriteLine("\nGive it a try");
             Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
             for(int i = 0; i < map.GetLength(0); i++)
             {
@@ -132,12 +135,14 @@ namespace FirstPlayable_WillB
                 for(int j = 0; j < map.GetLength(1); j++)
                 {
                     Console.Write(map[i, j]);
-                    
                 }
                 Console.Write("|");
                 Console.Write('\n');
             }
             Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
+                start = false;
+            }
+            
 
         }
         static void stage1()
