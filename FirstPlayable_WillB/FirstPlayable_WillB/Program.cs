@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.IO;
+using System.Media;
 
 namespace FirstPlayable_WillB
 {
@@ -14,8 +15,12 @@ namespace FirstPlayable_WillB
     {
         // int variables
         static int milliseconds;
+        static int startingStage = 1;
+        static int lives = 3;
+        static int playerPOSy = 10;
+        static int playerPOSx = 10;
         //float variables
-        static float playerHealth;
+        static float playerHealth = 100;
         static float playerDamage;
         static float enemyHealth;
         static float enemyDamage;
@@ -24,37 +29,22 @@ namespace FirstPlayable_WillB
         static string startCheck;
         static string userName;
         static string tutorialCheck;
+        static string path = @"Map.txt";
+        static string[] arrayInput;
+        static string showplayerHUD = @"showHUD.txt";
+        static string[] arrayHUD;
+        static List<string> playerweapon;
+        static string[] playerPOS;
 
-        static char[,] map = new char[,]
-        {
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },// 20  by 20
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-            {'.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.' },
-
-        };
+        
         static void Main(string[] args)
         {
-            Console.Write("+-----------------------+\n" +
-                          "|Welcome to Bumper fun  |\n" +
-                          "|Press any key to begin |\n" +
-                          "+-----------------------+\n");
+            
+            Console.Write("+-------------------------+\n" +
+                          "|Welcome to Cave explorers|\n" +
+                          "|Made by Will Boudreau    |\n" +
+                          "+-------------------------+\n");
+            Console.WriteLine("Press any key to begin:");
             Console.ReadKey();
             Console.WriteLine("Would you like to begin? Yes or No");
             gameStart = Console.ReadLine();
@@ -69,6 +59,7 @@ namespace FirstPlayable_WillB
         }
         static void annoyPlayer()
         { 
+            //Method to annoy the player until they quit or play the game
             Console.WriteLine("Are you sure?");
                 startCheck = Console.ReadLine();
                 if(startCheck == "Yes" | startCheck == "yes")
@@ -84,6 +75,7 @@ namespace FirstPlayable_WillB
         }
         static void MainMenu()
         {
+            //MAin menu of the game
             Console.WriteLine("Hello brave user! Please enter your name:");
             userName = Console.ReadLine();
             Console.WriteLine("Hello " + userName +"!");
@@ -97,15 +89,21 @@ namespace FirstPlayable_WillB
             {
                 Console.WriteLine("Alrighty than " + userName);
                 Console.WriteLine("Lets begin");
+                stage(startingStage);
             }
             Console.ReadKey();
         }
         static void ShowHUD()
         {
-
+            int x = 0;
+            Console.Write("+-------------+\n" +
+                          "| Health " + playerHealth + " |\n" +
+                          "+-------------+\n");
+    
         }
         static void tutorial()
         {
+            // Allows the Player to understand the game
             Console.Write("Welcome to the tutorial! Here we will cover the basics to playing the game:" +
                           "\nFirst off is you the player");
             milliseconds = 2000;
@@ -113,41 +111,92 @@ namespace FirstPlayable_WillB
             Console.WriteLine("\nIn this world, you will face monsters of unimaginable horrors!" +
                               "\nMonsters that want to eat you alive!");
             Thread.Sleep(milliseconds);
-            Console.WriteLine("\nYou are the main character of this adventure" +
+            Console.WriteLine("You are the main character of this adventure" +
                               "\n if you die and your lives reach 0" +
                               "\n The journeys over, you died.");
             Thread.Sleep(milliseconds);
-            Console.WriteLine("\nIn this game you will use the WASD keys to move" +
+            Console.WriteLine("In this game you will use the WASD keys to move" +
                               "\nW-To move up" +
                               "\nA-To move right" +
                               "\nS-To move down" +
                               "\nD-To move Left" +
                               "\nWhen you reach a monster, move into them to do damage. But if they move into you, they do damage to you");
             Thread.Sleep(milliseconds);
-            bool start = true;
-            while(start == true)
-            {
-                Console.WriteLine("\nGive it a try");
-            Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
-            for(int i = 0; i < map.GetLength(0); i++)
-            {
-                Console.Write("|");  
-                for(int j = 0; j < map.GetLength(1); j++)
-                {
-                    Console.Write(map[i, j]);
-                }
-                Console.Write("|");
-                Console.Write('\n');
-            }
-            Console.WriteLine("+" + new string('=', map.GetLength(1)) + "+");
-                start = false;
-            }
+            Console.WriteLine("\nGive it a try");
+            Map();
             
 
         }
-        static void stage1()
+        static void stage(int stage)
         {
-            Console.WriteLine("Welcome to stage 1");
+            Console.Clear();
+            Console.WriteLine("Welcome to stage " + stage );
+            ShowHUD();
+            Map();
+        }
+        static void Map()
+        {
+            // while loop shows off the map
+            bool start = true;
+            while(start == true)
+            { 
+                
+                arrayInput = File.ReadAllLines(path);
+                for (int i = 0; i < arrayInput.Length; i++)
+                {
+                        if (arrayInput[i] == ".")
+                        {
+                            Console.BackgroundColor = ConsoleColor.DarkGray;
+                            Console.ForegroundColor = ConsoleColor.Gray;
+                        }
+                        if (arrayInput[i] == "|")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                        if (arrayInput[i] == "+")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
+                    if (arrayInput[i] == "#")
+                    {
+                        Console.ForegroundColor = ConsoleColor.Magenta;
+                    }
+                        Console.WriteLine(arrayInput[i]);
+                        
+                }
+                Console.SetCursorPosition(10,10);
+                playerPOS = new string[2];
+                playerPOS[0] = "*";
+                Console.Write(playerPOS[0]);
+                ConsoleKeyInfo input;
+                input = Console.ReadKey();
+                start = false;
+            }
+
+        }
+        static void Enemy()
+        {
+            //Hold the information of the enemy
+
+        }
+        static void player()
+        {
+            playerHealth -= enemyDamage;
+            if(playerHealth <= 0)
+            {
+                Console.WriteLine("You have died!");
+                Console.WriteLine("You will lose one life!");
+                if(lives == 0)
+                {
+                    GameOver();
+                }
+            }
+
+            
+        }
+        static void GameOver()
+        {
+            Console.WriteLine("Game Over");
         }
         
     }
