@@ -28,24 +28,22 @@ namespace FirstPlayable_WillB
         static string gameStart;
         static string startCheck;
         static string userName;
-        static string tutorialCheck;w
+        static string tutorialCheck;
         static string path = @"Map.txt";
         static string[] arrayInput;
         static string[] playerPOS;
 
-        
+
         static void Main(string[] args)
         {
-            
+
             Console.Write("+-------------------------+\n" +
                           "|Welcome to Cave explorers|\n" +
                           "|Made by Will Boudreau    |\n" +
                           "+-------------------------+\n");
-            Console.WriteLine("Press any key to begin:");
-            Console.ReadKey();
             Console.WriteLine("Would you like to begin? Yes or No");
             gameStart = Console.ReadLine();
-            if(gameStart == "Yes" |  gameStart == "yes")
+            if (gameStart == "Yes" | gameStart == "yes")
             {
                 MainMenu();
             }
@@ -55,14 +53,14 @@ namespace FirstPlayable_WillB
             }
         }
         static void annoyPlayer()
-        { 
+        {
             //Method to annoy the player until they quit or play the game
             Console.WriteLine("Are you sure?");
-                startCheck = Console.ReadLine();
-                if(startCheck == "Yes" | startCheck == "yes")
-                {
-                    annoyPlayer();
-                }
+            startCheck = Console.ReadLine();
+            if (startCheck == "Yes" | startCheck == "yes")
+            {
+                annoyPlayer();
+            }
             else
             {
                 Console.WriteLine("Than lets begin finally!");
@@ -75,10 +73,10 @@ namespace FirstPlayable_WillB
             //MAin menu of the game
             Console.WriteLine("Hello brave user! Please enter your name:");
             userName = Console.ReadLine();
-            Console.WriteLine("Hello " + userName +"!");
+            Console.WriteLine("Hello " + userName + "!");
             Console.WriteLine("Would you like to start off with a tutorial? Yes or No");
             tutorialCheck = Console.ReadLine();
-            if(tutorialCheck == "yes" | tutorialCheck == "Yes") 
+            if (tutorialCheck == "yes" | tutorialCheck == "Yes")
             {
                 tutorial();
             }
@@ -92,11 +90,10 @@ namespace FirstPlayable_WillB
         }
         static void ShowHUD()
         {
-            int x = 0;
             Console.Write("+-------------+\n" +
                           "| Health " + playerHealth + " |\n" +
                           "+-------------+\n");
-    
+
         }
         static void tutorial()
         {
@@ -120,54 +117,33 @@ namespace FirstPlayable_WillB
                               "\nWhen you reach a monster, move into them to do damage. But if they move into you, they do damage to you");
             Thread.Sleep(milliseconds);
             Console.WriteLine("\nGive it a try");
-            Map();
-            
+            stage(1);
+
 
         }
         static void stage(int stage)
         {
             Console.Clear();
-            Console.WriteLine("Welcome to stage " + stage );
+            Console.WriteLine("Welcome to stage " + stage);
             ShowHUD();
             Map();
+            player();
         }
         static void Map()
         {
             // while loop shows off the map
             bool start = true;
-            while(start == true)
-            { 
-                
+            while (start == true)
+            {
+
                 arrayInput = File.ReadAllLines(path);
                 for (int i = 0; i < arrayInput.Length; i++)
                 {
-                        if (arrayInput[i] == ".")
-                        {
-                            Console.BackgroundColor = ConsoleColor.DarkGray;
-                            Console.ForegroundColor = ConsoleColor.Gray;
-                        }
-                        if (arrayInput[i] == "|")
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
-                        if (arrayInput[i] == "+")
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
-                    if (arrayInput[i] == "#")
-                    {
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                    }
-                        Console.WriteLine(arrayInput[i]);
-                        
+                    Console.WriteLine(arrayInput[i]);
+
                 }
-                Console.SetCursorPosition(10,10);
-                playerPOS = new string[2];
-                playerPOS[0] = "*";
-                Console.Write(playerPOS[0]);
-                ConsoleKeyInfo input;
-                input = Console.ReadKey();
-                start = false;
+                break;
+                //start = false;
             }
 
         }
@@ -178,23 +154,34 @@ namespace FirstPlayable_WillB
         }
         static void player()
         {
-            playerHealth -= enemyDamage;
-            if(playerHealth <= 0)
+            ConsoleKeyInfo input;
+            input = Console.ReadKey();
+            while (true)
             {
-                Console.WriteLine("You have died!");
-                Console.WriteLine("You will lose one life!");
-                if(lives == 0)
-                {
-                    GameOver();
-                }
+            if (input.Key == ConsoleKey.W)
+            {
+                playerPOSy--;
             }
+            if (input.Key == ConsoleKey.A)
+            {
+                playerPOSx--;
+            }
+            if (input.Key == ConsoleKey.D)
+            {
+                playerPOSx++;
+            }
+            if (input.Key == ConsoleKey.S)
+            {
+                playerPOSy++;
+            }
+            Console.SetCursorPosition(playerPOSx, playerPOSy);
+            playerPOS = new string[2];
+            playerPOS[0] = "*";
+            Console.Write(playerPOS[0]);
+            Console.ReadKey();
 
-            
+            }
         }
-        static void GameOver()
-        {
-            Console.WriteLine("Game Over");
-        }
-        
     }
-}
+
+}   
