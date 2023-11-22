@@ -28,12 +28,9 @@ namespace FirstPlayable_WillB
         static string gameStart;
         static string startCheck;
         static string userName;
-        static string tutorialCheck;
+        static string tutorialCheck;w
         static string path = @"Map.txt";
         static string[] arrayInput;
-        static string showplayerHUD = @"showHUD.txt";
-        static string[] arrayHUD;
-        static List<string> playerweapon;
         static string[] playerPOS;
 
         
