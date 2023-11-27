@@ -22,7 +22,7 @@ namespace FirstPlayable_WillB
         //float variables
         static float playerHealth = 100;
         static float playerDamage;
-        static float enemyHealth;
+        static float enemyHealth = 100;
         static float enemyDamage;
         //string variables
         static string gameStart;
@@ -32,6 +32,7 @@ namespace FirstPlayable_WillB
         static string path = @"Map.txt";
         static string[] arrayInput;
         static string[] playerPOS;
+        static string[] enemyPOS;
 
 
         static void Main(string[] args)
@@ -46,6 +47,10 @@ namespace FirstPlayable_WillB
             if (gameStart == "Yes" | gameStart == "yes")
             {
                 MainMenu();
+            }
+            if(gameStart == "Skip" | gameStart == "skip")
+            {
+                stage(startingStage);
             }
             else
             {
@@ -93,7 +98,6 @@ namespace FirstPlayable_WillB
             Console.Write("+-------------+\n" +
                           "| Health " + playerHealth + " |\n" +
                           "+-------------+\n");
-
         }
         static void tutorial()
         {
@@ -118,8 +122,6 @@ namespace FirstPlayable_WillB
             Thread.Sleep(milliseconds);
             Console.WriteLine("\nGive it a try");
             stage(1);
-
-
         }
         static void stage(int stage)
         {
@@ -128,6 +130,7 @@ namespace FirstPlayable_WillB
             ShowHUD();
             Map();
             player();
+            Enemy();
         }
         static void Map()
         {
@@ -135,52 +138,100 @@ namespace FirstPlayable_WillB
             bool start = true;
             while (start == true)
             {
-
                 arrayInput = File.ReadAllLines(path);
                 for (int i = 0; i < arrayInput.Length; i++)
                 {
                     Console.WriteLine(arrayInput[i]);
-
                 }
                 break;
                 //start = false;
             }
-
         }
         static void Enemy()
         {
             //Hold the information of the enemy
-
+            enemyPOS = new string[2];
+            enemyPOS[0] = "#";
+            //Enemy stats
+            enemyDamage = 15;
         }
         static void player()
         {
+            // Stats
+            Console.Write(playerHealth);
+            playerDamage = 25;
+            //Movement
             ConsoleKeyInfo input;
             input = Console.ReadKey();
             while (true)
             {
-            if (input.Key == ConsoleKey.W)
-            {
-                playerPOSy--;
+                if (input.Key == ConsoleKey.W)
+                {
+                    playerPOSy--;
+                }
+                if (input.Key == ConsoleKey.A)
+                {
+                    playerPOSx--;
+                }
+                if (input.Key == ConsoleKey.D)
+                {
+                    playerPOSx++;
+                }
+                if (input.Key == ConsoleKey.S)
+                {
+                    playerPOSy++;
+                }
+                playerPOS = new string[2];
+                playerPOS[0] = "*"; 
+                Console.Write(playerPOS[0]);
+                Console.SetCursorPosition(playerPOSx, playerPOSy);
+                Console.ReadKey();
+                if(playerPOS == enemyPOS)
+                {
+                    TakeDamage();
+                }
             }
-            if (input.Key == ConsoleKey.A)
+        }
+        static void TakeDamage()
+        {
+            Console.WriteLine("You are about to take " + enemyDamage + " Damage");
+            playerHealth -= enemyDamage;
+            if (playerHealth >= 75)
             {
-                playerPOSx--;
+                Console.WriteLine("Health Good");
             }
-            if (input.Key == ConsoleKey.D)
+            if (playerHealth < 75 | playerHealth >= 50)
             {
-                playerPOSx++;
+                Console.WriteLine("Health okay");
             }
-            if (input.Key == ConsoleKey.S)
+            if(playerHealth < 50 | playerHealth >= 25)
             {
-                playerPOSy++;
+                Console.WriteLine("Health Bad");
             }
-            Console.SetCursorPosition(playerPOSx, playerPOSy);
-            playerPOS = new string[2];
-            playerPOS[0] = "*";
-            Console.Write(playerPOS[0]);
-            Console.ReadKey();
+            if(playerHealth > 25 | playerHealth > 0)
+            {
+                Console.WriteLine("Health Critical");
+            }
+            if (playerHealth <= 0)
+            {
+                playerHealth = 0;
+                Console.WriteLine("You have died");
+                if(lives >= 0)
+                {
+                    stage(1);
+                }
+                else
+                {
+                    gameOver();
+                }
+            }
+        }
+        static void gameOver()
+        {
+            Console.WriteLine("Game Over");
+            Console.WriteLine("Would you like to start over? ");
+            Console.ReadLine();
 
-            }
         }
     }
 
