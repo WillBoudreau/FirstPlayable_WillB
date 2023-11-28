@@ -30,7 +30,8 @@ namespace FirstPlayable_WillB
         static string userName;
         static string tutorialCheck;
         static string path = @"Map.txt";
-        static string[] arrayInput;
+        static string[] arrayString;
+        static char [,] arrayChar;
         static string[] playerPOS;
         static string[] enemyPOS;
 
@@ -46,7 +47,7 @@ namespace FirstPlayable_WillB
             gameStart = Console.ReadLine();
             if (gameStart == "Yes" | gameStart == "yes")
             {
-                MainMenu();
+                Menu();
             }
             if(gameStart == "Skip" | gameStart == "skip")
             {
@@ -70,10 +71,10 @@ namespace FirstPlayable_WillB
             {
                 Console.WriteLine("Than lets begin finally!");
                 Console.WriteLine();
-                MainMenu();
+                Menu();
             }
         }
-        static void MainMenu()
+        static void Menu()
         {
             //MAin menu of the game
             Console.WriteLine("Hello brave user! Please enter your name:");
@@ -127,10 +128,14 @@ namespace FirstPlayable_WillB
         {
             Console.Clear();
             Console.WriteLine("Welcome to stage " + stage);
-            ShowHUD();
-            Map();
-            player();
-            Enemy();
+            while (true)
+            {
+                ShowHUD();
+                Map();
+                player();
+                Enemy();
+
+            }
         }
         static void Map()
         {
@@ -138,14 +143,18 @@ namespace FirstPlayable_WillB
             bool start = true;
             while (start == true)
             {
-                arrayInput = File.ReadAllLines(path);
-                for (int i = 0; i < arrayInput.Length; i++)
+                
+                arrayString = File.ReadAllLines(path);
+                for (int i = 0; i < arrayString.Length; i++)
                 {
-                    Console.WriteLine(arrayInput[i]);
+                    Console.WriteLine(arrayString[i]);
                 }
                 break;
-                //start = false;
             }
+        }
+        static void stringTochar()
+        {
+            
         }
         static void Enemy()
         {
@@ -157,21 +166,42 @@ namespace FirstPlayable_WillB
         }
         static void player()
         {
+            int playerx = playerPOSx + 1;
+            int playerY = playerPOSy + 1;
             // Stats
             Console.Write(playerHealth);
             playerDamage = 25;
             //Movement
-            ConsoleKeyInfo input;
-            input = Console.ReadKey();
             while (true)
             {
-                if (input.Key == ConsoleKey.W)
+                ConsoleKeyInfo input;
+                input = Console.ReadKey();
+                playerPOS = new string[2];
+                playerPOS[0] = "*";
+                Console.Write(playerPOS[0]);
+                Console.SetCursorPosition(playerPOSx, playerPOSy);
+                if (input.Key == ConsoleKey.W)//key on keyboard
                 {
-                    playerPOSy--;
+                    if (arrayString[playerY] == ".")
+                    { 
+                        playerPOSy--;
+                    }
+                    if (arrayString[playerY] == "^" | arrayString[playerY] == "|") 
+                    {
+                        playerPOSy++;
+                    }
+                   
                 }
                 if (input.Key == ConsoleKey.A)
                 {
-                    playerPOSx--;
+                    if (arrayString[playerPOSx--] == ".")
+                    {
+                        playerPOSx--;
+                    }
+                    if (arrayString[playerPOSx--] == "^" | arrayString[playerPOSx] == "|") 
+                    {
+                        playerPOSx++;
+                    }
                 }
                 if (input.Key == ConsoleKey.D)
                 {
@@ -181,12 +211,7 @@ namespace FirstPlayable_WillB
                 {
                     playerPOSy++;
                 }
-                playerPOS = new string[2];
-                playerPOS[0] = "*"; 
-                Console.Write(playerPOS[0]);
-                Console.SetCursorPosition(playerPOSx, playerPOSy);
-                Console.ReadKey();
-                if(playerPOS == enemyPOS)
+                if (playerPOS == enemyPOS)
                 {
                     TakeDamage();
                 }
